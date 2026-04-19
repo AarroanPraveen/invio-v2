@@ -85,12 +85,6 @@
         transform: translateX(50%);
       }
 
-      @media (max-width: 768px) {
-        .card-container.is-open .card-book {
-          transform: translateX(50%) scale(0.65);
-        }
-      }
-
       /* --- THE INSIDE RIGHT PAGE --- */
       .page-right {
         position: absolute;
@@ -236,7 +230,7 @@
         letter-spacing: 1px;
         font-style: italic;
         font-family: "Playfair Display", serif;
-        transition: opacity 0.2s ease; /* Faster fade in/out for better sync */
+        transition: opacity 0.2s ease;
       }
 
       /* Valentine Interactive Section */
@@ -426,6 +420,49 @@
       .progress-bar:hover .progress-fill::after {
         opacity: 1;
       }
+
+      /* =========================================
+         MOBILE RESPONSIVE FIXES (The Mathematical Fix)
+         ========================================= */
+      @media (max-width: 768px) {
+        .card-container.is-open .card-book {
+          transform: translateX(32.5%) scale(0.65);
+        }
+      }
+
+      @media (max-width: 480px) {
+        .card-container {
+          width: 85vw;
+          height: 480px;
+        }
+        
+        /* 1. Scale down and perfectly center using T = 50% * S */
+        .card-container.is-open .card-book {
+          transform: translateX(27.5%) scale(0.55);
+        }
+
+        /* 2. Because the card shrinks, we scale the internal text back up so it is perfectly readable */
+        .neon-heart { font-size: 6.5rem; margin-bottom: 25px; }
+        .title { font-size: 3rem; }
+        .instruction { font-size: 1.1rem; margin-top: 40px; }
+        
+        .lyrics { font-size: 1.8rem; line-height: 1.6; }
+        
+        .question { font-size: 2rem; margin-bottom: 35px; }
+        .btn { font-size: 1.2rem; padding: 18px 36px; border-width: 2px; }
+        
+        .photo-reveal { max-width: 300px; border-width: 3px; }
+        
+        .player { padding-top: 25px; }
+        .track-info { font-size: 1rem; margin-bottom: 25px; }
+        .btn-play { width: 60px; height: 60px; }
+        .play-icon { border-left-width: 14px; border-top-width: 8px; border-bottom-width: 8px; margin-left: 6px;}
+        .play-icon.playing { width: 14px; height: 18px; border-left-width: 5px; border-right-width: 5px; margin-left: 0;}
+        
+        .progress-container { font-size: 1rem; margin-top: 30px; gap: 15px;}
+        .progress-bar { height: 6px; }
+        .progress-fill::after { width: 14px; height: 14px; top: -4px; right: -7px;}
+      }
     </style>
   </head>
   <body>
@@ -580,6 +617,10 @@
           !cardContainer.contains(e.target)
         ) {
           cardContainer.classList.remove("is-open");
+          
+          // FIX: Pause audio and reset the play button icon when the card is closed
+          audio.pause();
+          playIcon.className = "play-icon";
         }
       });
 
